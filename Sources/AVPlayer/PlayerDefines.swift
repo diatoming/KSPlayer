@@ -13,7 +13,7 @@ import UIKit
 import AppKit
 #endif
 
-@objc public protocol MediaPlayback: AnyObject {
+public protocol MediaPlayback: AnyObject {
     var duration: TimeInterval { get }
     var naturalSize: CGSize { get }
     var currentPlaybackTime: TimeInterval { get }
@@ -25,7 +25,7 @@ import AppKit
     func seek(time: TimeInterval, completion handler: ((Bool) -> Void)?)
 }
 
-@objc public protocol MediaPlayerProtocol: MediaPlayback {
+public protocol MediaPlayerProtocol: MediaPlayback {
     var delegate: MediaPlayerDelegate? { get set }
     var view: UIView { get }
     var playableTime: TimeInterval { get }
@@ -52,7 +52,7 @@ import AppKit
     func thumbnailImageAtCurrentTime(handler: @escaping (UIImage?) -> Void)
 }
 
-@objc public protocol MediaPlayerDelegate: AnyObject {
+public protocol MediaPlayerDelegate: AnyObject {
     func preparedToPlay(player: MediaPlayerProtocol)
     func changeLoadState(player: MediaPlayerProtocol)
     // 缓冲加载进度，0-100
@@ -124,7 +124,7 @@ public struct KSPlayerManager {
     }
 }
 
-@objc public enum MediaPlaybackState: Int {
+public enum MediaPlaybackState: Int {
     case idle
     case playing
     case paused
@@ -133,7 +133,7 @@ public struct KSPlayerManager {
     case stopped
 }
 
-@objc public enum MediaLoadState: Int {
+public enum MediaLoadState: Int {
     case idle
     case loading
     case playable

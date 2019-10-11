@@ -12,7 +12,7 @@ import UIKit
 import AppKit
 #endif
 
-public class KSMEPlayer: NSObject {
+public class KSMEPlayer {
     private var loopCount = 1
     private let audioOutput = AudioOutput()
     // 为了及时显示页面
@@ -66,7 +66,6 @@ public class KSMEPlayer: NSObject {
 
     public required init(url: URL, options: [String: Any]? = [:]) {
         playerItem = MEPlayerItem(url: url, options: options)
-        super.init()
         playerItem.pixelFormatType = pixelFormatType
         playerItem.delegate = self
         audioOutput.renderSource = playerItem

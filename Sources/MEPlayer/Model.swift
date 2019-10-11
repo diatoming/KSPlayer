@@ -16,7 +16,7 @@ import AppKit
 
 // MARK: enum
 
-@objc public enum MEErrorCode: Int {
+public enum MEErrorCode: Int {
     case unknown
     case formatCreate
     case formatOpenInput

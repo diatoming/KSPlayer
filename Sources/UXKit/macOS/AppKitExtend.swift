@@ -630,7 +630,7 @@ class CADisplayLink: NSObject {
         }
     }
 
-    public init(target: AnyObject, selector sel: Selector) {
+    public init(target: NSObject, selector sel: Selector) {
         self.target = target
         selector = sel
         super.init()
