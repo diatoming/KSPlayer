@@ -6,9 +6,9 @@
 //
 
 import AudioToolbox
+import CoreAudio
 import CoreMedia
 import QuartzCore
-import CoreAudio
 
 final class AudioOutput: FrameOutput {
     private let semaphore = DispatchSemaphore(value: 1)

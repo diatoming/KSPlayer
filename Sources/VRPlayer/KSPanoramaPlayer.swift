@@ -11,11 +11,15 @@ import AppKit
 #endif
 public class KSVRPlayer: KSMEPlayer {
     open override var renderViewType: (PixelRenderView & UIView).Type {
+        #if os(macOS)
+        return PanoramaView.self
+        #else
         if canUseMetal() {
             return PanoramaView.self
         } else {
             return OpenGLVRPlayView.self
         }
+        #endif
     }
 
     public override var pixelFormatType: OSType {

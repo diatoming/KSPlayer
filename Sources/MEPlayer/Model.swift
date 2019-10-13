@@ -28,6 +28,7 @@ func canUseMetal() -> Bool {
     #endif
     #endif
 }
+
 // MARK: enum
 
 public enum MEErrorCode: Int {

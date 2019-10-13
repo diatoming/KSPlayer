@@ -6,7 +6,7 @@
 //
 import Foundation
 
-public protocol SubtitleInfo: class {
+public protocol SubtitleInfo: AnyObject {
     var userInfo: NSMutableDictionary? { get set }
     var subtitleDataSouce: SubtitleDataSouce? { get set }
     var name: String { get }
@@ -64,7 +64,7 @@ extension URLSubtitleInfo: MakeSubtitle {
     }
 }
 
-public protocol SubtitletoCache: class {
+public protocol SubtitletoCache: AnyObject {
     var cache: CacheDataSouce? { get set }
 }
 
@@ -74,7 +74,7 @@ extension SubtitletoCache {
     }
 }
 
-public protocol SubtitleDataSouce: class {
+public protocol SubtitleDataSouce: AnyObject {
     func searchSubtitle(name: String, completion: @escaping ([SubtitleInfo]?) -> Void)
     func fetchSubtitleDetail(info: SubtitleInfo, completion: @escaping (SubtitleInfo, NSError?) -> Void)
 }
