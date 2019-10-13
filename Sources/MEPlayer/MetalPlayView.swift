@@ -128,7 +128,13 @@ final class MetalPlayView: MTKView {
 
     override var drawableSize: CGSize {
         didSet {
+            #if targetEnvironment(simulator)
+            if #available(iOS 13.0, tvOS 13.0, *) {
+                (layer as? CAMetalLayer)?.drawableSize = drawableSize
+            }
+            #else
             (layer as? CAMetalLayer)?.drawableSize = drawableSize
+            #endif
         }
     }
 }

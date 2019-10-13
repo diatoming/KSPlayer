@@ -13,7 +13,21 @@ import UIKit
 #else
 import AppKit
 #endif
-
+func canUseMetal() -> Bool {
+    #if arch(arm)
+    return false
+    #else
+    #if targetEnvironment(simulator)
+    if #available(iOS 13.0, tvOS 13.0, *) {
+        return true
+    } else {
+        return false
+    }
+    #else
+    return true
+    #endif
+    #endif
+}
 // MARK: enum
 
 public enum MEErrorCode: Int {
@@ -158,7 +172,11 @@ public struct KSDefaultParameter {
         #if arch(arm)
         return OpenGLPlayView.self
         #else
-        return MetalPlayView.self
+        if canUseMetal() {
+            return MetalPlayView.self
+        } else {
+            return SampleBufferPlayerView.self
+        }
         #endif
     }()
 
