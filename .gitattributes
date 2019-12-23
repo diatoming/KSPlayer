@@ -1,1 +1,2 @@
-*.xcframework filter=lfs diff=lfs merge=lfs -text
+FFmpeg/FFmpeg.xcframework filter=lfs diff=lfs merge=lfs -text
+FFmpeg/OpenSSL.xcframework filter=lfs diff=lfs merge=lfs -text
