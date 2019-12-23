@@ -1,4 +1,4 @@
-use_frameworks!
+use_frameworks! :linkage => :static
 workspace 'Demo.xcworkspace'
 install! 'cocoapods', :generate_multiple_pod_projects => true
 def common

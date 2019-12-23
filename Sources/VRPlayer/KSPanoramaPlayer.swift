@@ -11,7 +11,7 @@ import AppKit
 #endif
 public class KSVRPlayer: KSMEPlayer {
     open override var renderViewType: (PixelRenderView & UIView).Type {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return PanoramaView.self
         #else
         if canUseMetal() {

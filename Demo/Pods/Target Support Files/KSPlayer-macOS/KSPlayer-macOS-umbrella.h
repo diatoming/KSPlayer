@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#import "FFmpeg.h"
+#import "FFmpegError.h"
 
 FOUNDATION_EXPORT double KSPlayerVersionNumber;
 FOUNDATION_EXPORT const unsigned char KSPlayerVersionString[];

@@ -23,7 +23,7 @@ final class AudioOutput: FrameOutput {
     }
 
     weak var renderSource: OutputRenderSourceDelegate?
-    let audioPlayer = AudioPlayer()
+    let audioPlayer: AudioPlayer = AudioGraphPlayer()
 
     init() {
         audioPlayer.delegate = self

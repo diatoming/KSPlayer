@@ -153,7 +153,7 @@ public struct KSDefaultParameter {
     /// 日志级别
     public static var logLevel = AV_LOG_WARNING
     public static var audioPlayerMaximumFramesPerSlice = Int32(4096)
-    public static var audioPlayerMaximumChannels = Int32(2)
+    public static var audioPlayerMaximumChannels = preferredOutputNumberOfChannels()
     public static var audioPlayerSampleRate = Int32(44100)
     // 视频缓冲算法函数
     public static var playable: (LoadingStatus) -> Bool = { status in
@@ -186,7 +186,7 @@ public struct KSDefaultParameter {
         let floatByteSize = UInt32(MemoryLayout<Float>.size)
         audioStreamBasicDescription.mBitsPerChannel = 8 * floatByteSize
         audioStreamBasicDescription.mBytesPerFrame = floatByteSize
-        audioStreamBasicDescription.mChannelsPerFrame = UInt32(KSDefaultParameter.audioPlayerMaximumChannels)
+        audioStreamBasicDescription.mChannelsPerFrame = audioPlayerMaximumChannels
         audioStreamBasicDescription.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved
         audioStreamBasicDescription.mFormatID = kAudioFormatLinearPCM
         audioStreamBasicDescription.mFramesPerPacket = 1
@@ -194,6 +194,15 @@ public struct KSDefaultParameter {
         audioStreamBasicDescription.mSampleRate = Float64(KSDefaultParameter.audioPlayerSampleRate)
         return audioStreamBasicDescription
     }
+
+    static func preferredOutputNumberOfChannels() -> AVAudioChannelCount {
+        #if os(macOS)
+        return AVAudioChannelCount(2)
+        #else
+        return AVAudioChannelCount(AVAudioSession.sharedInstance().preferredOutputNumberOfChannels)
+        #endif
+    }
+    static let audioDefaultFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: Double(audioPlayerSampleRate), channels: audioPlayerMaximumChannels, interleaved: false)!
 }
 
 // 加载情况

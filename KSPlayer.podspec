@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
     s.osx.deployment_target = '10.11'
     # s.watchos.deployment_target = '2.0'
     s.tvos.deployment_target = '10.2'
-    s.swift_version = '5.0'
+    s.swift_version = '5.1'
     s.static_framework = true
     s.subspec 'UXKit' do |ss|
         ss.source_files = 'Sources/UXKit/*.{swift}'
@@ -45,48 +45,41 @@ Pod::Spec.new do |s|
         ss.dependency 'KSPlayer/SubtitleCore'
         ss.dependency 'KSPlayer/Resources'
     end
-    # s.subspec 'Openssl' do |openssl|
-    #     openssl.ios.vendored_libraries  = 'FFmpeg/openssl-iOS/lib/*.a'
-    #     openssl.ios.preserve_paths = 'FFmpeg/openssl-iOS/include'
-    #     openssl.tvos.vendored_libraries  = 'FFmpeg/openssl-tvOS/lib/*.a'
-    #     openssl.tvos.preserve_paths = 'FFmpeg/openssl-tvOS/include'
-    #     openssl.osx.vendored_libraries  = 'FFmpeg/openssl-macOS/lib/*.a'
-    #     openssl.osx.preserve_paths = 'FFmpeg/openssl-macOS/include'
-    # end
     s.subspec 'FFmpeg' do |ffmpeg|
 #        ffmpeg.public_header_files = 'Sources/FFmpeg/**/*.{h}'
-        ffmpeg.source_files = 'Sources/FFmpeg/**/*.{h,c}'
-        ffmpeg.libraries   = 'bz2', 'z'
-        ffmpeg.ios.vendored_libraries  = 'FFmpeg/FFmpeg-iOS/lib/*.a'
-        ffmpeg.ios.preserve_paths = 'FFmpeg/FFmpeg-iOS/include'
-        ffmpeg.tvos.vendored_libraries  = 'FFmpeg/FFmpeg-tvOS/lib/*.a'
-        ffmpeg.tvos.preserve_paths = 'FFmpeg/FFmpeg-tvOS/include'
-        ffmpeg.osx.vendored_libraries  = 'FFmpeg/FFmpeg-macOS/lib/*.a'
-        ffmpeg.osx.preserve_paths = 'FFmpeg/FFmpeg-macOS/include'
+        ffmpeg.source_files = 'Sources/FFmpegExt/**/*.{h,c}'
+        ffmpeg.libraries   = 'bz2', 'z', 'iconv'
         ffmpeg.ios.xcconfig = {
-            'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg-iOS/include ${PODS_ROOT}/../../FFmpeg/FFmpeg-iOS/include",
-            'SWIFT_INCLUDE_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg-iOS/include $(PODS_ROOT)/../../FFmpeg/FFmpeg-iOS/include"
+            'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers ${PODS_ROOT}/../../FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers",
+            'SWIFT_INCLUDE_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers ${PODS_ROOT}/../../FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers"
         }
         ffmpeg.tvos.xcconfig = {
-            'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg-tvOS/include ${PODS_ROOT}/../../FFmpeg/FFmpeg-tvOS/include",
-            'SWIFT_INCLUDE_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg-tvOS/include $(PODS_ROOT)/../../FFmpeg/FFmpeg-tvOS/include"
+            'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers ${PODS_ROOT}/../../FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers",
+            'SWIFT_INCLUDE_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers ${PODS_ROOT}/../../FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers"
         }
         ffmpeg.osx.xcconfig = {
-            'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg-macOS/include ${PODS_ROOT}/../../FFmpeg/FFmpeg-macOS/include",
-            'SWIFT_INCLUDE_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg-macOS/include $(PODS_ROOT)/../../FFmpeg/FFmpeg-macOS/include"
+            'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers ${PODS_ROOT}/../../FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers",
+            'SWIFT_INCLUDE_PATHS' => "${PODS_ROOT}/#{s.name}/FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers ${PODS_ROOT}/../../FFmpeg/FFmpeg.xcframework/ios-arm64/FFmpeg.framework/Headers"
         }
-        # ffmpeg.dependency 'Openssl'
-        ffmpeg.vendored_frameworks = 'Openssl.framework'
+        ffmpeg.vendored_frameworks = 'FFmpeg/FFmpeg.xcframework'
+        ffmpeg.dependency 'Openssl'
     end
     s.subspec 'Metal' do |ss|
         ss.source_files = 'Sources/Metal/*.{swift}'
         ss.weak_framework = 'MetalKit'
     end
-    s.subspec 'Panorama' do |ss|
-        ss.source_files = 'Sources/Panorama/**/*'
-        ss.frameworks  = 'SceneKit','GLKit'
+    s.subspec 'OpenGL' do |ss|
+        ss.source_files = 'Sources/OpenGL/**/*'
+        # ss.frameworks  = 'GLKit'
         ss.dependency 'KSPlayer/Basic'
         ss.dependency 'KSPlayer/Metal'
+    end
+    s.subspec 'Panorama' do |ss|
+        ss.source_files = 'Sources/Panorama/**/*'
+        ss.frameworks  = 'SceneKit'
+        ss.dependency 'KSPlayer/Basic'
+        ss.dependency 'KSPlayer/Metal'
+        ss.dependency 'KSPlayer/OpenGL'
     end
     #AVPlayer播放内核
     s.subspec 'AVPlayer' do |ss|
@@ -98,7 +91,7 @@ Pod::Spec.new do |s|
     s.subspec 'MEPlayer' do |ss|
         ss.source_files = 'Sources/MEPlayer/**/*.{swift}'
         ss.resources = 'Sources/MEPlayer/**/*.{metal,glsl,vsh,fsh}'
-        ss.frameworks  = 'AudioToolbox', 'VideoToolbox','GLKit'
+        ss.frameworks  = 'AudioToolbox', 'VideoToolbox'
         ss.dependency 'KSPlayer/FFmpeg'
         ss.dependency 'KSPlayer/AVPlayer'
         ss.dependency 'KSPlayer/Metal'

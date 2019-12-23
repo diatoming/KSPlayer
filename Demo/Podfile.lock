@@ -7,6 +7,7 @@ PODS:
     - KSPlayer/FFmpeg (= 1.0)
     - KSPlayer/MEPlayer (= 1.0)
     - KSPlayer/Metal (= 1.0)
+    - KSPlayer/OpenGL (= 1.0)
     - KSPlayer/Panorama (= 1.0)
     - KSPlayer/Resources (= 1.0)
     - KSPlayer/Subtitle (= 1.0)
@@ -24,16 +25,21 @@ PODS:
   - KSPlayer/Core (1.0):
     - KSPlayer/AVPlayer
     - KSPlayer/Resources
-  - KSPlayer/FFmpeg (1.0)
+  - KSPlayer/FFmpeg (1.0):
+    - Openssl
   - KSPlayer/MEPlayer (1.0):
     - KSPlayer/AVPlayer
     - KSPlayer/FFmpeg
     - KSPlayer/Metal
     - KSPlayer/SubtitleCore
   - KSPlayer/Metal (1.0)
+  - KSPlayer/OpenGL (1.0):
+    - KSPlayer/Basic
+    - KSPlayer/Metal
   - KSPlayer/Panorama (1.0):
     - KSPlayer/Basic
     - KSPlayer/Metal
+    - KSPlayer/OpenGL
   - KSPlayer/Resources (1.0)
   - KSPlayer/Subtitle (1.0):
     - KSPlayer/Basic
@@ -70,10 +76,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  KSPlayer: c9e4e5bd8d1b5e8e877a90b1eee396e3211ffd4b
-  Openssl: eb5c039b647f24c24296f2bbf0c9e2b593fa0917
+  KSPlayer: 6e7dc84fe1c040e8f8f973f45c9ab548e2537058
+  Openssl: dc2253a127aac00b10d1e52fb083cedf91ef041f
   SwiftLint: 5553187048b900c91aa03552807681bb6b027846
 
-PODFILE CHECKSUM: b8f8dfa32b16b18db92002fcace241e720598100
+PODFILE CHECKSUM: 89f8a54fcd667719d736e32b52d5a1ac8391ecfa
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.9.0.beta.2
