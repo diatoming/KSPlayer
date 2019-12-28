@@ -196,7 +196,7 @@ public struct KSDefaultParameter {
         audioStreamBasicDescription.mFormatID = kAudioFormatLinearPCM
         audioStreamBasicDescription.mFramesPerPacket = 1
         audioStreamBasicDescription.mBytesPerPacket = audioStreamBasicDescription.mFramesPerPacket * audioStreamBasicDescription.mBytesPerFrame
-        audioStreamBasicDescription.mSampleRate = Float64(KSDefaultParameter.audioPlayerSampleRate)
+        audioStreamBasicDescription.mSampleRate = Float64(audioPlayerSampleRate)
         return audioStreamBasicDescription
     }
 

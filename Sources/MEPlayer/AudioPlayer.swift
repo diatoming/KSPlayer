@@ -118,56 +118,29 @@ final class AudioGraphPlayer: AudioPlayer {
         AUGraphNodeInfo(graph, nodeForTimePitch, &descriptionForTimePitch, &audioUnitForTimePitch)
         AUGraphNodeInfo(graph, nodeForMixer, &descriptionForMixer, &audioUnitForMixer)
         AUGraphNodeInfo(graph, nodeForOutput, &descriptionForOutput, &audioUnitForOutput)
-        let inDataSize = UInt32(MemoryLayout.size(ofValue: KSDefaultParameter.audioPlayerMaximumFramesPerSlice))
-        AudioUnitSetProperty(audioUnitForTimePitch,
-                             kAudioUnitProperty_MaximumFramesPerSlice,
-                             kAudioUnitScope_Global, 0,
-                             &KSDefaultParameter.audioPlayerMaximumFramesPerSlice,
-                             inDataSize)
-        AudioUnitSetProperty(audioUnitForMixer,
-                             kAudioUnitProperty_MaximumFramesPerSlice,
-                             kAudioUnitScope_Global, 0,
-                             &KSDefaultParameter.audioPlayerMaximumFramesPerSlice,
-                             inDataSize)
-        AudioUnitSetProperty(audioUnitForOutput,
-                             kAudioUnitProperty_MaximumFramesPerSlice,
-                             kAudioUnitScope_Global, 0,
-                             &KSDefaultParameter.audioPlayerMaximumFramesPerSlice,
-                             inDataSize)
         var inputCallbackStruct = renderCallbackStruct()
         AUGraphSetNodeInputCallback(graph, nodeForTimePitch, 0, &inputCallbackStruct)
         addRenderNotify(audioUnit: audioUnitForOutput)
         let audioStreamBasicDescriptionSize = UInt32(MemoryLayout<AudioStreamBasicDescription>.size)
-        AudioUnitSetProperty(audioUnitForTimePitch,
-                             kAudioUnitProperty_StreamFormat,
-                             kAudioUnitScope_Input, 0,
-                             &audioStreamBasicDescription,
-                             audioStreamBasicDescriptionSize)
-        AudioUnitSetProperty(audioUnitForTimePitch,
-                             kAudioUnitProperty_StreamFormat,
-                             kAudioUnitScope_Output, 0,
-                             &audioStreamBasicDescription,
-                             audioStreamBasicDescriptionSize)
-        AudioUnitSetProperty(audioUnitForMixer,
-                             kAudioUnitProperty_StreamFormat,
-                             kAudioUnitScope_Input, 0,
-                             &audioStreamBasicDescription,
-                             audioStreamBasicDescriptionSize)
-        AudioUnitSetProperty(audioUnitForMixer,
-                             kAudioUnitProperty_StreamFormat,
-                             kAudioUnitScope_Output, 0,
-                             &audioStreamBasicDescription,
-                             audioStreamBasicDescriptionSize)
-        AudioUnitSetProperty(audioUnitForOutput,
-                             kAudioUnitProperty_StreamFormat,
-                             kAudioUnitScope_Input, 0,
-                             &audioStreamBasicDescription,
-                             audioStreamBasicDescriptionSize)
-        AudioUnitSetProperty(audioUnitForOutput,
-                             kAudioUnitProperty_StreamFormat,
-                             kAudioUnitScope_Input, 0,
-                             &audioStreamBasicDescription,
-                             audioStreamBasicDescriptionSize)
+        let inDataSize = UInt32(MemoryLayout.size(ofValue: KSDefaultParameter.audioPlayerMaximumFramesPerSlice))
+        [audioUnitForTimePitch, audioUnitForMixer, audioUnitForOutput].forEach { unit in
+            guard let unit = unit else { return }
+            AudioUnitSetProperty(unit,
+                                 kAudioUnitProperty_MaximumFramesPerSlice,
+                                 kAudioUnitScope_Global, 0,
+                                 &KSDefaultParameter.audioPlayerMaximumFramesPerSlice,
+                                 inDataSize)
+            AudioUnitSetProperty(unit,
+                                 kAudioUnitProperty_StreamFormat,
+                                 kAudioUnitScope_Input, 0,
+                                 &audioStreamBasicDescription,
+                                 audioStreamBasicDescriptionSize)
+            AudioUnitSetProperty(unit,
+                                 kAudioUnitProperty_StreamFormat,
+                                 kAudioUnitScope_Output, 0,
+                                 &audioStreamBasicDescription,
+                                 audioStreamBasicDescriptionSize)
+        }
         AUGraphInitialize(graph)
     }
 
