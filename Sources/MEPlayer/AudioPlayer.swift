@@ -92,14 +92,17 @@ final class AudioGraphPlayer: AudioPlayer {
         var descriptionForMixer = AudioComponentDescription()
         descriptionForMixer.componentType = kAudioUnitType_Mixer
         descriptionForMixer.componentManufacturer = kAudioUnitManufacturer_Apple
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        descriptionForMixer.componentSubType = kAudioUnitSubType_SpatialMixer
+        #else
+        descriptionForMixer.componentSubType = kAudioUnitSubType_MultiChannelMixer
+        #endif
         var descriptionForOutput = AudioComponentDescription()
         descriptionForOutput.componentType = kAudioUnitType_Output
         descriptionForOutput.componentManufacturer = kAudioUnitManufacturer_Apple
         #if os(macOS)
-        descriptionForMixer.componentSubType = kAudioUnitSubType_StereoMixer
         descriptionForOutput.componentSubType = kAudioUnitSubType_DefaultOutput
         #else
-        descriptionForMixer.componentSubType = kAudioUnitSubType_MultiChannelMixer
         descriptionForOutput.componentSubType = kAudioUnitSubType_RemoteIO
         #endif
         var nodeForTimePitch = AUNode()
@@ -239,6 +242,7 @@ extension AVAudioPlayerNode {
 //        self.scheduleBuffer(buf, completionHandler: completion)
 //    }
 }
+@available(OSX 10.13, tvOS 11.0, iOS 11.0, *)
 final class AudioEnginePlayer: AudioPlayer {
 
     private let engine = AVAudioEngine()
@@ -275,9 +279,14 @@ final class AudioEnginePlayer: AudioPlayer {
     init() {
         engine.attach(player)
         engine.attach(picth)
-        engine.connect(player, to: picth, format: KSDefaultParameter.audioDefaultFormat)
-        engine.connect(picth, to: engine.mainMixerNode, format: KSDefaultParameter.audioDefaultFormat)
+        let format = KSDefaultParameter.audioDefaultFormat
+        engine.connect(player, to: picth, format: format)
+        engine.connect(picth, to: engine.mainMixerNode, format: format)
         engine.prepare()
+        try? engine.enableManualRenderingMode(.realtime, format: format, maximumFrameCount: KSDefaultParameter.audioPlayerMaximumFramesPerSlice)
+//        engine.inputNode.setManualRenderingInputPCMFormat(format) { count -> UnsafePointer<AudioBufferList>? in
+//            self.delegate?.audioPlayerShouldInputData(ioData: <#T##UnsafeMutableAudioBufferListPointer#>, numberOfSamples: <#T##UInt32#>, numberOfChannels: <#T##UInt32#>)
+//        }
     }
     func play() {
         player.play()

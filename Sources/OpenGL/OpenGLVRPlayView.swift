@@ -7,7 +7,7 @@
 
 import CoreMedia
 
-#if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst) && !os(macOS)
 import GLKit
 
 final class OpenGLVRPlayView: OpenGLPlayView {

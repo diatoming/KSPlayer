@@ -24,7 +24,7 @@ extension CGSize {
     }
 }
 
-#if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst) && !os(macOS)
 
 import GLKit
 #if os(macOS)

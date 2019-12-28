@@ -152,9 +152,14 @@ public struct KSDefaultParameter {
     public static var enableVideotoolbox = true
     /// 日志级别
     public static var logLevel = AV_LOG_WARNING
-    public static var audioPlayerMaximumFramesPerSlice = Int32(4096)
-    public static var audioPlayerMaximumChannels = preferredOutputNumberOfChannels()
+    public static var audioPlayerMaximumFramesPerSlice = AVAudioFrameCount(4096)
+    #if os(macOS)
     public static var audioPlayerSampleRate = Int32(44100)
+    public static var audioPlayerMaximumChannels = AVAudioChannelCount(2)
+    #else
+    public static var audioPlayerSampleRate = Int32(AVAudioSession.sharedInstance().sampleRate)
+    public static var audioPlayerMaximumChannels = AVAudioChannelCount(AVAudioSession.sharedInstance().outputNumberOfChannels)
+    #endif
     // 视频缓冲算法函数
     public static var playable: (LoadingStatus) -> Bool = { status in
         guard status.frameCount > 0 else { return false }
@@ -195,13 +200,6 @@ public struct KSDefaultParameter {
         return audioStreamBasicDescription
     }
 
-    static func preferredOutputNumberOfChannels() -> AVAudioChannelCount {
-        #if os(macOS)
-        return AVAudioChannelCount(2)
-        #else
-        return AVAudioChannelCount(AVAudioSession.sharedInstance().preferredOutputNumberOfChannels)
-        #endif
-    }
     static let audioDefaultFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: Double(audioPlayerSampleRate), channels: audioPlayerMaximumChannels, interleaved: false)!
 }
 
