@@ -14,7 +14,7 @@ protocol AudioPlayerDelegate: AnyObject {
     func audioPlayerDidRenderSample(sampleTimestamp: AudioTimeStamp)
 }
 
-protocol AudioPlayer: class {
+protocol AudioPlayer: AnyObject {
     var delegate: AudioPlayerDelegate? { get set }
     var playbackRate: Float { get set }
     var volume: Float { get set }
@@ -216,6 +216,7 @@ final class AudioGraphPlayer: AudioPlayer {
         DisposeAUGraph(graph)
     }
 }
+
 import AVFoundation
 
 import Accelerate
@@ -242,9 +243,9 @@ extension AVAudioPlayerNode {
 //        self.scheduleBuffer(buf, completionHandler: completion)
 //    }
 }
+
 @available(OSX 10.13, tvOS 11.0, iOS 11.0, *)
 final class AudioEnginePlayer: AudioPlayer {
-
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()
     private let picth = AVAudioUnitTimePitch()
@@ -267,13 +268,12 @@ final class AudioEnginePlayer: AudioPlayer {
             player.volume = newValue
         }
     }
+
     var isMuted: Bool {
         get {
             return volume == 0
         }
-        set {
-
-        }
+        set {}
     }
 
     init() {
@@ -288,6 +288,7 @@ final class AudioEnginePlayer: AudioPlayer {
 //            self.delegate?.audioPlayerShouldInputData(ioData: <#T##UnsafeMutableAudioBufferListPointer#>, numberOfSamples: <#T##UInt32#>, numberOfChannels: <#T##UInt32#>)
 //        }
     }
+
     func play() {
         player.play()
     }
@@ -297,13 +298,13 @@ final class AudioEnginePlayer: AudioPlayer {
     }
 
     func audioPlay(buffer: AVAudioPCMBuffer) {
-        self.player.scheduleBuffer(buffer, completionHandler: nil)
+        player.scheduleBuffer(buffer, completionHandler: nil)
     }
-
 }
+
 extension AVAudioFormat {
     func toPCMBuffer(data: NSData) -> AVAudioPCMBuffer? {
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: self, frameCapacity: UInt32(data.length)/streamDescription.pointee.mBytesPerFrame) else {
+        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: self, frameCapacity: UInt32(data.length) / streamDescription.pointee.mBytesPerFrame) else {
             return nil
         }
         pcmBuffer.frameLength = pcmBuffer.frameCapacity

@@ -44,13 +44,13 @@ let package = Package(
             dependencies: [],
             // path: "Sources/FFmpegExt",
             cSettings: [
-                .headerSearchPath("FFmpeg/FFmpeg.xcframework/ios-arm64/Headers")
+                .headerSearchPath("FFmpeg/FFmpeg.xcframework/ios-arm64/Headers"),
             ],
             swiftSettings: [
-                .unsafeFlags(["-F FFmpeg"])
+                .unsafeFlags(["-F FFmpeg"]),
             ],
             linkerSettings: [
-                .linkedFramework("FFmpeg")
+                .linkedFramework("FFmpeg"),
             ]
         ),
         .testTarget(
@@ -115,5 +115,3 @@ let package = Package(
         // ),
     ]
 )
-
-
