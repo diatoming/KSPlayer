@@ -158,7 +158,7 @@ CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=mpegps"
 CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=mpegts"
 CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=mpegvideo"
 CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=hevc"
-
+CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=dash"
 CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=wav"
 CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=ogg"
 CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-demuxer=ape"

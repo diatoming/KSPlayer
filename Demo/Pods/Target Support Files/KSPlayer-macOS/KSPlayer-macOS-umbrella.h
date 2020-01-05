@@ -11,6 +11,7 @@
 #endif
 
 #import "FFmpegError.h"
+#import "ShaderDefinitions.h"
 
 FOUNDATION_EXPORT double KSPlayerVersionNumber;
 FOUNDATION_EXPORT const unsigned char KSPlayerVersionString[];

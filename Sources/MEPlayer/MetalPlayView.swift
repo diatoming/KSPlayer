@@ -7,47 +7,20 @@
 
 import CoreMedia
 import MetalKit
+import simd
+
 final class MetalPlayView: MTKView {
     private var textureLoad: MetalTexture
+    var displayModel: DisplayModel
     private lazy var samplerState: MTLSamplerState? = {
         let samplerDescriptor = MTLSamplerDescriptor()
+        samplerDescriptor.mipFilter = .nearest
         samplerDescriptor.minFilter = .linear
         samplerDescriptor.magFilter = .linear
         samplerDescriptor.sAddressMode = .repeat
         samplerDescriptor.rAddressMode = .repeat
         samplerDescriptor.tAddressMode = .repeat
         return device?.makeSamplerState(descriptor: samplerDescriptor)
-    }()
-
-    private lazy var renderPipelineState: MTLRenderPipelineState! = {
-        var library: MTLLibrary!
-        if #available(iOS 10, OSX 10.12, *) {
-            library = try? device?.makeDefaultLibrary(bundle: Bundle(for: type(of: self)))
-        }
-        let filepath = Bundle(for: type(of: self))
-        if library == nil, let libraryFile = Bundle(for: type(of: self)).path(forResource: "Shaders", ofType: "metal") {
-            do {
-                let source = try String(contentsOfFile: libraryFile)
-                library = try device?.makeLibrary(source: source, options: nil)
-            } catch {}
-        }
-        let pipelineDescriptor = MTLRenderPipelineDescriptor()
-        //        pipelineDescriptor.depthAttachmentPixelFormat = .stencil8
-        pipelineDescriptor.vertexFunction = library.makeFunction(name: "mapTexture")
-        if KSDefaultParameter.bufferPixelFormatType == kCVPixelFormatType_32BGRA {
-            pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-            pipelineDescriptor.fragmentFunction = library.makeFunction(name: "displayTexture")
-        } else {
-            pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-            pipelineDescriptor.fragmentFunction = library.makeFunction(name: "displayYUVTexture")
-        }
-        var renderPipelineState: MTLRenderPipelineState!
-        do {
-            try renderPipelineState = device!.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        } catch {
-            assertionFailure("Failed creating a render state pipeline. Can't render the texture without one.")
-        }
-        return renderPipelineState
     }()
 
     private lazy var colorConversion601VideoRangeMatrixBuffer: MTLBuffer? = {
@@ -105,21 +78,16 @@ final class MetalPlayView: MTKView {
     }()
 
     init() {
-        // Get the default metal device.
-        #if os(macOS)
-        let metalDevice = MTLCopyAllDevices().first
-        #else
-        let metalDevice = MTLCreateSystemDefaultDevice()
-        #endif
-        textureLoad = MetalTexture(device: metalDevice)
-        super.init(frame: .zero, device: metalDevice)
+        let device = MetalRenderPipelinePool.share.device
+        textureLoad = MetalTexture()
+        displayModel = PlaneDisplayModel()
+        super.init(frame: .zero, device: device)
         clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
 //        delegate = self
         framebufferOnly = true
         autoResizeDrawable = false
         // Change drawing mode based on setNeedsDisplay().
         enableSetNeedsDisplay = true
-        _ = renderPipelineState
     }
 
     required init(coder _: NSCoder) {
@@ -150,15 +118,15 @@ extension MetalPlayView: PixelRenderView {
                 let textures = textureLoad.texture(pixelBuffer: pixelBuffer) else {
                 return
             }
-            encoder.setRenderPipelineState(renderPipelineState)
+            encoder.setRenderPipelineState(MetalRenderPipelinePool.share.pipeline(pixelBuffer: pixelBuffer).state)
             encoder.pushDebugGroup("RenderFrame")
-            setFragmentBuffer(pixelBuffer: pixelBuffer, encoder: encoder)
+            encoder.setFragmentSamplerState(samplerState, index: 0)
             for (index, texture) in textures.enumerated() {
                 texture.label = "texture\(index)"
                 encoder.setFragmentTexture(texture, index: index)
             }
-            encoder.setFragmentSamplerState(samplerState, index: 0)
-            encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+            setFragmentBuffer(pixelBuffer: pixelBuffer, encoder: encoder)
+            displayModel.set(encoder: encoder)
             encoder.popDebugGroup()
             encoder.endEncoding()
             if let drawable = currentDrawable {
@@ -173,7 +141,7 @@ extension MetalPlayView: PixelRenderView {
     }
 
     private func setFragmentBuffer(pixelBuffer: CVPixelBuffer, encoder: MTLRenderCommandEncoder) {
-        let pixelFormatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
+        let pixelFormatType = pixelBuffer.format
         if pixelFormatType != kCVPixelFormatType_32BGRA {
             var buffer = colorConversion601FullRangeMatrixBuffer
             let colorAttachments = CVBufferGetAttachment(pixelBuffer, kCVImageBufferYCbCrMatrixKey, nil)?.takeUnretainedValue() as? NSString ?? kCVImageBufferYCbCrMatrix_ITU_R_709_2

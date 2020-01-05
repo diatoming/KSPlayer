@@ -133,6 +133,38 @@ extension AVCodecParameters {
     }
 }
 
+extension AVPixelFormat {
+    var format: OSType {
+        switch self {
+        case AV_PIX_FMT_MONOBLACK: return kCVPixelFormatType_1Monochrome
+        case AV_PIX_FMT_RGB555BE: return kCVPixelFormatType_16BE555
+        case AV_PIX_FMT_RGB555LE: return kCVPixelFormatType_16LE555
+        case AV_PIX_FMT_RGB565BE: return kCVPixelFormatType_16BE565
+        case AV_PIX_FMT_RGB565LE: return kCVPixelFormatType_16LE565
+        case AV_PIX_FMT_RGB24: return kCVPixelFormatType_24RGB
+        case AV_PIX_FMT_BGR24: return kCVPixelFormatType_24BGR
+        case AV_PIX_FMT_0RGB: return kCVPixelFormatType_32ARGB
+        case AV_PIX_FMT_BGR0: return kCVPixelFormatType_32BGRA
+        case AV_PIX_FMT_0BGR: return kCVPixelFormatType_32ABGR
+        case AV_PIX_FMT_RGB0: return kCVPixelFormatType_32RGBA
+        case AV_PIX_FMT_BGR48BE: return kCVPixelFormatType_48RGB
+        case AV_PIX_FMT_UYVY422: return kCVPixelFormatType_422YpCbCr8
+        case AV_PIX_FMT_YUVA444P: return kCVPixelFormatType_4444YpCbCrA8R
+        case AV_PIX_FMT_YUVA444P16LE: return kCVPixelFormatType_4444AYpCbCr16
+        case AV_PIX_FMT_YUV444P: return kCVPixelFormatType_444YpCbCr8
+//        case AV_PIX_FMT_YUV422P16: return kCVPixelFormatType_422YpCbCr16
+//        case AV_PIX_FMT_YUV422P10: return kCVPixelFormatType_422YpCbCr10
+//        case AV_PIX_FMT_YUV444P10: return kCVPixelFormatType_444YpCbCr10
+        case AV_PIX_FMT_YUV420P: return kCVPixelFormatType_420YpCbCr8Planar
+        case AV_PIX_FMT_NV12: return kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+        case AV_PIX_FMT_YUYV422: return kCVPixelFormatType_422YpCbCr8_yuvs
+        case AV_PIX_FMT_GRAY8: return kCVPixelFormatType_OneComponent8
+        default:
+            return 0
+        }
+    }
+}
+
 extension CVPixelBufferPool {
     static func create(sourcePixelBufferOptions: NSMutableDictionary, bufferCount: Int = 24) -> CVPixelBufferPool? {
         var outputPool: CVPixelBufferPool?
@@ -189,51 +221,5 @@ extension CVPixelBufferPool {
             CVPixelBufferUnlockBaseAddress(pbuf, CVPixelBufferLockFlags(rawValue: 0))
         }
         return pbuf
-    }
-}
-
-extension CVPixelBuffer {
-    var drawableSize: CGSize {
-        // Check if the pixel buffer exists
-        if let ratio = CVBufferGetAttachment(self, kCVImageBufferPixelAspectRatioKey, nil)?.takeUnretainedValue() as? NSDictionary,
-            let horizontal = (ratio[kCVImageBufferPixelAspectRatioHorizontalSpacingKey] as? NSNumber)?.intValue,
-            let vertical = (ratio[kCVImageBufferPixelAspectRatioVerticalSpacingKey] as? NSNumber)?.intValue,
-            horizontal > 0, vertical > 0, horizontal != vertical {
-            return CGSize(width: width, height: height * vertical / horizontal)
-        } else {
-            return size
-        }
-    }
-
-    var width: Int {
-        return CVPixelBufferGetWidth(self)
-    }
-
-    var height: Int {
-        return CVPixelBufferGetHeight(self)
-    }
-
-    var size: CGSize {
-        return CGSize(width: width, height: height)
-    }
-
-    var isPlanar: Bool {
-        return CVPixelBufferIsPlanar(self)
-    }
-
-    var planeCount: Int {
-        return CVPixelBufferGetPlaneCount(self)
-    }
-
-    func widthOfPlane(at planeIndex: Int) -> Int {
-        return CVPixelBufferGetWidthOfPlane(self, planeIndex)
-    }
-
-    func heightOfPlane(at planeIndex: Int) -> Int {
-        return CVPixelBufferGetHeightOfPlane(self, planeIndex)
-    }
-
-    func baseAddressOfPlane(at planeIndex: Int) -> UnsafeMutableRawPointer? {
-        return CVPixelBufferGetBaseAddressOfPlane(self, planeIndex)
     }
 }

@@ -146,8 +146,8 @@ extension MEFrame {
 // MARK: model
 
 public struct KSDefaultParameter {
-    /// 视频颜色编码方式 支持kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange kCVPixelFormatType_420YpCbCr8BiPlanarFullRange kCVPixelFormatType_32BGRA 默认是kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
-    public static var bufferPixelFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
+    /// 视频颜色编码方式 支持kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange kCVPixelFormatType_420YpCbCr8BiPlanarFullRange kCVPixelFormatType_32BGRA kCVPixelFormatType_420YpCbCr8Planar 默认是kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
+    public static var bufferPixelFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
     /// 开启 硬解 默认true
     public static var enableVideotoolbox = true
     /// 日志级别

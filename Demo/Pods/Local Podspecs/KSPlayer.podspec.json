@@ -127,12 +127,18 @@
     },
     {
       "name": "Metal",
-      "source_files": "Sources/Metal/*.{swift}",
+      "source_files": "Sources/Metal/*.{h,swift,metal}",
+      "resource_bundles": {
+        "Metal": [
+          "Sources/Metal/*.metal"
+        ]
+      },
       "weak_frameworks": "MetalKit"
     },
     {
       "name": "OpenGL",
-      "source_files": "Sources/OpenGL/**/*",
+      "source_files": "Sources/OpenGL/**/*.swift",
+      "resources": "Sources/OpenGL/**/*.{glsl,vsh,fsh}",
       "dependencies": {
         "KSPlayer/Basic": [
 
@@ -171,7 +177,6 @@
     {
       "name": "MEPlayer",
       "source_files": "Sources/MEPlayer/**/*.{swift}",
-      "resources": "Sources/MEPlayer/**/*.{metal,glsl,vsh,fsh}",
       "frameworks": [
         "AudioToolbox",
         "VideoToolbox"

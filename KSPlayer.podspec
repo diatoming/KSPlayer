@@ -65,11 +65,16 @@ Pod::Spec.new do |s|
         ffmpeg.dependency 'Openssl'
     end
     s.subspec 'Metal' do |ss|
-        ss.source_files = 'Sources/Metal/*.{swift}'
+        ss.source_files = 'Sources/Metal/*.{h,swift,metal}'
+        ss.resource_bundles = {
+            'Metal' => ['Sources/Metal/*.metal']
+        }  
+        # ss.resources = 'Sources/Metal/**/*.{metal}'
         ss.weak_framework = 'MetalKit'
     end
     s.subspec 'OpenGL' do |ss|
-        ss.source_files = 'Sources/OpenGL/**/*'
+        ss.source_files = 'Sources/OpenGL/**/*.swift'
+        ss.resources = 'Sources/OpenGL/**/*.{glsl,vsh,fsh}'
         # ss.frameworks  = 'GLKit'
         ss.dependency 'KSPlayer/Basic'
         ss.dependency 'KSPlayer/Metal'
@@ -90,7 +95,6 @@ Pod::Spec.new do |s|
     #ffmpeg播放内核
     s.subspec 'MEPlayer' do |ss|
         ss.source_files = 'Sources/MEPlayer/**/*.{swift}'
-        ss.resources = 'Sources/MEPlayer/**/*.{metal,glsl,vsh,fsh}'
         ss.frameworks  = 'AudioToolbox', 'VideoToolbox'
         ss.dependency 'KSPlayer/FFmpeg'
         ss.dependency 'KSPlayer/AVPlayer'
