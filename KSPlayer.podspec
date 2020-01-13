@@ -72,20 +72,6 @@ Pod::Spec.new do |s|
         # ss.resources = 'Sources/Metal/**/*.{metal}'
         ss.weak_framework = 'MetalKit'
     end
-    s.subspec 'OpenGL' do |ss|
-        ss.source_files = 'Sources/OpenGL/**/*.swift'
-        ss.resources = 'Sources/OpenGL/**/*.{glsl,vsh,fsh}'
-        # ss.frameworks  = 'GLKit'
-        ss.dependency 'KSPlayer/Basic'
-        ss.dependency 'KSPlayer/Metal'
-    end
-    s.subspec 'Panorama' do |ss|
-        ss.source_files = 'Sources/Panorama/**/*'
-        ss.frameworks  = 'SceneKit'
-        ss.dependency 'KSPlayer/Basic'
-        ss.dependency 'KSPlayer/Metal'
-        ss.dependency 'KSPlayer/OpenGL'
-    end
     #AVPlayer播放内核
     s.subspec 'AVPlayer' do |ss|
         ss.source_files = 'Sources/AVPlayer/*.{swift}'
@@ -101,11 +87,7 @@ Pod::Spec.new do |s|
         ss.dependency 'KSPlayer/Metal'
         ss.dependency 'KSPlayer/SubtitleCore'
     end
-    s.subspec 'VRPlayer' do |ss|
-        ss.source_files = 'Sources/VRPlayer/**/*'
-        ss.dependency 'KSPlayer/MEPlayer'
-        ss.dependency 'KSPlayer/Panorama'
-    end
+  
     s.subspec 'Core' do |ss|
         ss.source_files = 'Sources/Core/*'
         ss.ios.source_files = 'Sources/Core/iOS/*.swift'

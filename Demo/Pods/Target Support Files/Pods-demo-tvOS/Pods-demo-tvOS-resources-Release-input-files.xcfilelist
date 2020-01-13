@@ -1,5 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-demo-tvOS/Pods-demo-tvOS-resources.sh
 ${PODS_CONFIGURATION_BUILD_DIR}/KSPlayer-tvOS/Metal.bundle
-${PODS_ROOT}/../../Sources/OpenGL/Shader.fsh
-${PODS_ROOT}/../../Sources/OpenGL/Shader.vsh
 ${PODS_CONFIGURATION_BUILD_DIR}/KSPlayer-tvOS/KSResources.bundle

@@ -98,14 +98,10 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/KSPlayer-iOS/Metal.bundle"
-  install_resource "${PODS_ROOT}/../../Sources/OpenGL/Shader.fsh"
-  install_resource "${PODS_ROOT}/../../Sources/OpenGL/Shader.vsh"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/KSPlayer-iOS/KSResources.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/KSPlayer-iOS/Metal.bundle"
-  install_resource "${PODS_ROOT}/../../Sources/OpenGL/Shader.fsh"
-  install_resource "${PODS_ROOT}/../../Sources/OpenGL/Shader.vsh"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/KSPlayer-iOS/KSResources.bundle"
 fi
 

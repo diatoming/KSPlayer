@@ -150,6 +150,8 @@ public struct KSDefaultParameter {
     public static var bufferPixelFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
     /// 开启 硬解 默认true
     public static var enableVideotoolbox = true
+    /// 开启VR模式的陀飞轮
+    public static var enableSensor = true
     /// 日志级别
     public static var logLevel = AV_LOG_WARNING
     public static var audioPlayerMaximumFramesPerSlice = AVAudioFrameCount(4096)
@@ -160,6 +162,7 @@ public struct KSDefaultParameter {
     public static var audioPlayerSampleRate = Int32(AVAudioSession.sharedInstance().sampleRate)
     public static var audioPlayerMaximumChannels = AVAudioChannelCount(AVAudioSession.sharedInstance().outputNumberOfChannels)
     #endif
+
     // 视频缓冲算法函数
     public static var playable: (LoadingStatus) -> Bool = { status in
         guard status.frameCount > 0 else { return false }
@@ -175,15 +178,11 @@ public struct KSDefaultParameter {
 
     // 画面绘制类
     public static var renderViewType: (PixelRenderView & UIView).Type = {
-        #if arch(arm)
-        return OpenGLPlayView.self
-        #else
         if canUseMetal() {
             return MetalPlayView.self
         } else {
             return SampleBufferPlayerView.self
         }
-        #endif
     }()
 
     static func outputFormat() -> AudioStreamBasicDescription {

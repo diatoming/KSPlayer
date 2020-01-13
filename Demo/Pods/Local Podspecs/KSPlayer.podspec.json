@@ -136,35 +136,6 @@
       "weak_frameworks": "MetalKit"
     },
     {
-      "name": "OpenGL",
-      "source_files": "Sources/OpenGL/**/*.swift",
-      "resources": "Sources/OpenGL/**/*.{glsl,vsh,fsh}",
-      "dependencies": {
-        "KSPlayer/Basic": [
-
-        ],
-        "KSPlayer/Metal": [
-
-        ]
-      }
-    },
-    {
-      "name": "Panorama",
-      "source_files": "Sources/Panorama/**/*",
-      "frameworks": "SceneKit",
-      "dependencies": {
-        "KSPlayer/Basic": [
-
-        ],
-        "KSPlayer/Metal": [
-
-        ],
-        "KSPlayer/OpenGL": [
-
-        ]
-      }
-    },
-    {
       "name": "AVPlayer",
       "source_files": "Sources/AVPlayer/*.{swift}",
       "frameworks": "AVFoundation",
@@ -192,18 +163,6 @@
 
         ],
         "KSPlayer/SubtitleCore": [
-
-        ]
-      }
-    },
-    {
-      "name": "VRPlayer",
-      "source_files": "Sources/VRPlayer/**/*",
-      "dependencies": {
-        "KSPlayer/MEPlayer": [
-
-        ],
-        "KSPlayer/Panorama": [
 
         ]
       }

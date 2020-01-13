@@ -12,6 +12,7 @@ import AppKit
 #endif
 // AVSampleBufferAudioRenderer AVSampleBufferRenderSynchronizer AVSampleBufferDisplayLayer
 public final class SampleBufferPlayerView: UIView {
+    public var display: DisplayEnum = .plane
     private var videoInfo: CMVideoFormatDescription?
     private var displayLayer: AVSampleBufferDisplayLayer {
         // swiftlint:disable force_cast

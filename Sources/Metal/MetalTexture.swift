@@ -6,12 +6,13 @@
 //
 
 import MetalKit
-final class MetalTexture {
+public final class MetalTexture {
+    public static var share = MetalTexture()
     private var textureCache: CVMetalTextureCache?
     public var commandQueue: MTLCommandQueue?
     private let device: MTLDevice
     init() {
-        device = MetalRenderPipelinePool.share.device
+        device = MetalRender.share.device
         CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache)
         commandQueue = device.makeCommandQueue()
     }

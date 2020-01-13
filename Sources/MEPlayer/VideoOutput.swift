@@ -24,8 +24,8 @@ final class VideoOutput: NSObject, FrameOutput {
         return displayLink
     }()
 
-    init(renderView: PixelRenderView & UIView) {
-        self.renderView = renderView
+    override init() {
+        renderView = KSDefaultParameter.renderViewType.init()
     }
 
     func play() {

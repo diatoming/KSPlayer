@@ -64,7 +64,7 @@ public final class PanoramaView: UIView {
     }
 
     public init(frame: CGRect, format: MediaFormat) {
-        device = MetalRenderPipelinePool.share.device
+        device = MetalRender.share.device
         textureLoad = MetalTexture()
         super.init(frame: frame)
         switch format {
@@ -120,7 +120,7 @@ public final class PanoramaView: UIView {
     #endif
 }
 
-extension PanoramaView: PixelRenderView {
+extension PanoramaView {
     public func set(pixelBuffer: CVPixelBuffer, time _: CMTime) {
         if let texture = textureLoad.texture(pixelBuffer: pixelBuffer)?.first {
             scene?.set(texture: texture)

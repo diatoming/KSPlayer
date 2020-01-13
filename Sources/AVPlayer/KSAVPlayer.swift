@@ -107,6 +107,7 @@ public class KSAVPlayer {
     }
 
     public var isAutoPlay = true
+    public var display: DisplayEnum = .plane
     public weak var delegate: MediaPlayerDelegate?
     public private(set) var duration: TimeInterval = 0
     public private(set) var playableTime: TimeInterval = 0

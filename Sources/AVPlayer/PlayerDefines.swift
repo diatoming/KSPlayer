@@ -44,6 +44,7 @@ public protocol MediaPlayerProtocol: MediaPlayback {
     var contentMode: UIViewContentMode { get set }
     var preferredForwardBufferDuration: TimeInterval { get set }
     var subtitleDataSouce: SubtitleDataSouce? { get }
+    var display: DisplayEnum { get set }
     init(url: URL, options: [String: Any]?)
     func replace(url: URL, options: [String: Any]?)
     func pause()
@@ -147,5 +148,6 @@ func KSLog(_ message: CustomStringConvertible, file: String = #file, function: S
 }
 
 public protocol PixelRenderView {
+    var display: DisplayEnum { get set }
     func set(pixelBuffer: CVPixelBuffer, time: CMTime)
 }
